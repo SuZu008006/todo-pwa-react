@@ -1,6 +1,6 @@
 import {initializeApp} from 'firebase/app';
 import "firebase/firestore";
-import {getAuth, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
+import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth";
 
 initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -13,12 +13,18 @@ initializeApp({
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 })
 
-const provider = new GoogleAuthProvider()
 export const auth = getAuth()
+const provider = new GoogleAuthProvider()
 
 export const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
         .then((result) => {
             GoogleAuthProvider.credentialFromResult(result)
         })
+}
+
+export const logOut = () => {
+    signOut(auth).then(() => {
+        document.location.reload()
+    })
 }

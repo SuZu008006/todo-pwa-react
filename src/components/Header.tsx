@@ -1,26 +1,39 @@
+import {User} from 'firebase/auth'
 import {useContext} from 'react'
 import {AuthContext} from '../providers/AuthProvider'
-import {signInWithGoogle} from '../service/firebase'
-import {User} from 'firebase/auth'
+import {logOut, signInWithGoogle} from '../service/firebase'
 
-const Header = () => {
+export default function Header() {
   const currentUser: User | null = useContext(AuthContext).currentUser
+
+  const userStatusDisplay = () => {
+    if (currentUser) {
+      return (
+        <>
+          <button onClick={logOut}>
+            logout
+          </button>
+          <div>
+            user name : {currentUser.displayName}
+          </div>
+        </>
+      )
+    }
+    return (
+      <>
+        <button onClick={signInWithGoogle}>
+          sign in
+        </button>
+        <div>
+          user name : guest
+        </div>
+      </>
+    )
+  }
 
   return (
     <header>
-      ヘッダー的な何か
-      <button
-        onClick={signInWithGoogle}
-      >
-        ログインボタン的な何か
-      </button>
-      {currentUser &&
-          <div>
-            現在のログインユーザー : {currentUser.displayName}
-          </div>
-      }
+      {userStatusDisplay()}
     </header>
   )
 }
-
-export default Header

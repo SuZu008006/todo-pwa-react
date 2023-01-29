@@ -1,15 +1,13 @@
 import React from 'react'
-import AuthProvider from './providers/AuthProvider'
 import Header from './components/Header'
+import AuthProvider from './providers/AuthProvider'
 
-function App() {
+export default function App() {
   return (
     <>
       <AuthProvider>
-        <Header></Header>
+        <Header/>
       </AuthProvider>
     </>
   )
 }
-
-export default App
