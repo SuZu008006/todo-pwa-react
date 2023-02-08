@@ -1,8 +1,9 @@
-import {initializeApp} from 'firebase/app';
-import "firebase/firestore";
-import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth";
+import {initializeApp} from 'firebase/app'
+import 'firebase/firestore'
+import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/auth'
+import {getFirestore} from 'firebase/firestore'
 
-initializeApp({
+const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
     databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
@@ -14,6 +15,7 @@ initializeApp({
 })
 
 export const auth = getAuth()
+export const db = getFirestore(app)
 const provider = new GoogleAuthProvider()
 
 export const signInWithGoogle = () => {
