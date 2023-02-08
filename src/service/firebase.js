@@ -2,6 +2,7 @@ import {initializeApp} from 'firebase/app'
 import 'firebase/firestore'
 import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/auth'
 import {getFirestore} from 'firebase/firestore'
+import {getMessaging, getToken} from 'firebase/messaging'
 
 const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -30,3 +31,31 @@ export const logOut = () => {
         document.location.reload()
     })
 }
+
+export const messaging = getMessaging(app)
+navigator.serviceWorker
+    .register('./firebase-messaging-sw.js')
+    .then(function (registration) {
+        console.log("Registration successful, scope is:", registration.scope);
+        getToken(
+            messaging,
+            {vapidKey: process.env.REACT_APP_FIREBASE_PUBLIC_KEY})
+            .then((currentToken) => {
+                if (currentToken) {
+                    console.log('current token for client: ', currentToken);
+                } else {
+                    console.log('No registration token available. Request permission to generate one.');
+                }
+            }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+        })
+    })
+    .catch(function (err) {
+        console.log("Service worker registration failed, error:", err);
+    })
+
+Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+        console.log('Notification permission granted.')
+    }
+})
